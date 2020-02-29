@@ -9,7 +9,7 @@ public class KeyGenerator {
     }
 
     public Key keyGen(){
-        BigInteger q , k , p , g;
+        BigInteger q , k , p , g, h;
 
 
         //generation q \ 256bits random
@@ -30,6 +30,8 @@ public class KeyGenerator {
         // U(g^q) + V(p) = 1
         // sqrt_q((1 - V(p))/U) = g
         //note q et p sont premiers
+
+       /*
         do{
             g = new BigInteger(512, new SecureRandom()); //g 512 bits random
         } while(g.modPow(q,p) != BigInteger.ONE);
@@ -38,23 +40,27 @@ public class KeyGenerator {
         System.out.println("g generated...");
 
 
+*/
 
 
-        /*
         //pour generer un nombre entre 2 et p-2, on genere un nombre entre 0 et p-4 et on lui ajoute 2
+
+
         BigInteger upperLimit = new BigInteger(String.valueOf(((p.subtract(BigInteger.ONE).subtract(BigInteger.ONE)).subtract(BigInteger.ONE)).subtract(BigInteger.ONE)));
         do {
 
             do {
-                g = new BigInteger(upperLimit.bitLength(), new SecureRandom());
-            } while (g.compareTo(upperLimit) >= 0);
-            g.add(BigInteger.ONE.add(BigInteger.ONE));
+                h = new BigInteger(p.bitLength() , new SecureRandom());
+            } while (h.compareTo(upperLimit) >= 0);
+            h.add(BigInteger.ONE.add(BigInteger.ONE));
+        }while (expMod(h , k , p) == BigInteger.ONE);
 
+        System.out.println("h generated...");
 
-            System.out.println(g.modPow(q, p));
-        }while (expMod(g , q , p) != BigInteger.ONE || expMod(g , k , p) == BigInteger.ONE);
-        */
+        //expMod(g , q , p) != BigInteger.ONE
+        g = expMod(h, k, p);
 
+        assert(expMod(g, q, p)==BigInteger.ONE && expMod(g, k, p ) != BigInteger.ONE):"Gen Key failed, g is not a generator";
 
         return new Key(q ,p , g);
     }
