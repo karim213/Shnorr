@@ -1,4 +1,5 @@
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
 
@@ -8,7 +9,7 @@ public class KeyGenerator {
            return g.modPow(a, p);
     }
 
-    public Key keyGen(){
+    public Key keyGen() throws NoSuchAlgorithmException {
         BigInteger q , k , p , g, h;
 
 
@@ -60,7 +61,6 @@ public class KeyGenerator {
         //expMod(g , q , p) != BigInteger.ONE
         g = expMod(h, k, p);
 
-        assert(expMod(g, q, p)==BigInteger.ONE && expMod(g, k, p ) != BigInteger.ONE):"Gen Key failed, g is not a generator";
 
         return new Key(q ,p , g);
     }
