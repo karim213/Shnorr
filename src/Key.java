@@ -15,19 +15,19 @@ public class Key {
     private BigInteger kp;
     private BigInteger ks;
 
-    public Key(BigInteger q, BigInteger p, BigInteger g) throws NoSuchAlgorithmException {
+    public Key(BigInteger q, BigInteger p, BigInteger g)  {
         BigInteger upperLimit = new BigInteger(String.valueOf(((q.subtract(new BigInteger("4"))))));
         do {
             ks = new BigInteger(p.bitLength(), new SecureRandom());
-            System.out.println(ks);
         } while (upperLimit.compareTo(ks) == 1 && ks.compareTo(new BigInteger("1")) == 1);
         ks.add(new BigInteger("2"));
 
         kp = (new KeyGenerator()).expMod(g, ks, p);
 
-        String text = "hello";
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] hash = digest.digest(text.getBytes(StandardCharsets.UTF_8));
+        this.q = q;
+        this.p = p;
+        this.g = g;
+
     }
     public BigInteger getKp() {
         return kp;
@@ -35,5 +35,17 @@ public class Key {
 
     public BigInteger getKs() {
         return ks;
+    }
+
+    public BigInteger getQ() {
+        return q;
+    }
+
+    public BigInteger getP() {
+        return p;
+    }
+
+    public BigInteger getG() {
+        return g;
     }
 }
